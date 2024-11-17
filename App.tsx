@@ -1,29 +1,18 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import Header from "./components/Header";
-import InfoTab from "./components/InfoTab";
-import Repo from "./components/RepoTab";
+import WelcomeScreen from "./components/WelcomeScreen";
 
 export default function App() {
-  const [displayQR, setDisplayQR] = useState(true);
   const [lightTheme, setLightTheme] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(true);
 
   return (
     <View style={styles.container}>
-      <Header
-        displayQR={displayQR}
-        setDisplayQR={setDisplayQR}
+      <WelcomeScreen
         lightTheme={lightTheme}
         setLightTheme={setLightTheme}
+        navigateToPortfolio={() => setShowWelcome(false)}
       />
-
-      <View style={styles.body}>
-        {displayQR ? (
-          <InfoTab lightTheme={lightTheme} />
-        ) : (
-          <Repo lightTheme={lightTheme} />
-        )}
-      </View>
     </View>
   );
 }
@@ -31,15 +20,5 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  body: {
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "space-between",
-    height: "85%",
-    marginTop: 10,
   },
 });
