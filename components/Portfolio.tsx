@@ -14,12 +14,7 @@ const Tab = createMaterialTopTabNavigator();
 const Portfolio = ({ lightTheme, setLightTheme }: PortfolioProps) => {
   return (
     <>
-      <Header
-        displayQR={false}
-        setDisplayQR={() => {}}
-        lightTheme={lightTheme}
-        setLightTheme={setLightTheme}
-      />
+      <Header lightTheme={lightTheme} setLightTheme={setLightTheme} />
 
       <Tab.Navigator
         screenOptions={{

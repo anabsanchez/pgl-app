@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   hobbiesTitle: {
-    color: "white",
+    color: "rgba(244, 152, 121, .7)",
     fontWeight: "800",
     fontSize: 14,
     textAlign: "center",
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   hobbyText: {
-    color: "white",
+    color: "rgba(244, 152, 121, .8)",
     textAlign: "center",
     fontWeight: "bold",
     fontStyle: "italic",

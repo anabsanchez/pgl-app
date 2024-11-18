@@ -1,7 +1,10 @@
-import { Text, StyleSheet, View, Image } from "react-native";
+import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useRouter } from "expo-router";
 import { LIGHT_THEME, DARK_THEME } from "../utils/ThemeColors";
+import { useNavigation } from "@react-navigation/native";
 
 export type HeaderProps = {
   lightTheme: boolean;
@@ -10,6 +13,8 @@ export type HeaderProps = {
 
 const Header = ({ lightTheme, setLightTheme }: HeaderProps) => {
   const themeColors = lightTheme ? LIGHT_THEME : DARK_THEME;
+  const router = useRouter();
+  const navigation = useNavigation();
 
   return (
     <View
@@ -30,7 +35,12 @@ const Header = ({ lightTheme, setLightTheme }: HeaderProps) => {
         >
           My Portfolio
         </Text>
-        <View style={{ width: 24 }} />
+
+        <MaterialIcons
+          name="rocket-launch"
+          size={24}
+          color={lightTheme ? "white" : "#F49879"}
+        />
       </View>
 
       <View
