@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, Image } from "react-native";
 import React from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { LIGHT_THEME, DARK_THEME } from "../utils/ThemeColors";
@@ -16,15 +16,30 @@ const Header = ({ lightTheme, setLightTheme }: HeaderProps) => {
       style={[styles.header, { backgroundColor: themeColors.headerBackground }]}
     >
       <View style={styles.headerTop}>
-        <Text style={styles.headerTitle}>My Portfolio</Text>
+        <MaterialCommunityIcons
+          name="theme-light-dark"
+          size={24}
+          color="white"
+          onPress={() => setLightTheme(!lightTheme)}
+        />
+        <Text style={[styles.headerTitle, { color: "white" }]}>
+          My Portfolio
+        </Text>
+        <View style={{ width: 24 }} />
+      </View>
 
-        <View>
-          <MaterialCommunityIcons
-            name="theme-light-dark"
-            size={24}
-            color="white"
-            onPress={() => setLightTheme(!lightTheme)}
-          />
+      <View style={styles.descriptionContainer}>
+        <Image
+          style={styles.avatar}
+          source={require("../assets/images/profile/AnaSanchez.jpeg")}
+        />
+        <View style={styles.descriptionBox}>
+          <Text style={styles.descriptionTitle}>Hey there, this is Ana!</Text>
+          <Text style={styles.description}>
+            I'm just a programming student trying to figure out my way into this
+            crazy world of ones and zeros, despite my teacher's efforts to make
+            it as difficult as possible.
+          </Text>
         </View>
       </View>
     </View>
@@ -35,23 +50,54 @@ export default Header;
 
 const styles = StyleSheet.create({
   header: {
-    height: "15%",
-    paddingTop: 50,
     width: "100%",
+    paddingTop: 50,
+    paddingBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   headerTop: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    color: "white",
-    paddingLeft: 85,
-    paddingRight: 20,
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
   },
   headerTitle: {
-    color: "white",
     fontSize: 30,
+    fontWeight: "bold",
     textTransform: "uppercase",
-    marginTop: -3,
-    marginBottom: 3,
+    textAlign: "center",
+    flex: 1,
+  },
+  descriptionContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    margin: 10,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: "rgba(244, 210, 121, .07)",
+  },
+  avatar: {
+    height: 100,
+    width: 100,
+    borderRadius: 50,
+  },
+  descriptionBox: {
+    marginLeft: 15,
+    flex: 1,
+  },
+  descriptionTitle: {
+    fontWeight: "700",
+    fontSize: 16,
+    marginBottom: 5,
+    color: "#333",
+  },
+  description: {
+    fontSize: 12,
+    color: "#333",
+    textAlign: "justify",
   },
 });
