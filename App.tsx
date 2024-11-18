@@ -1,20 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import Welcome from "./components/WelcomeScreen";
+import Portfolio from "./components/PortfolioScreen";
 
 export default function App() {
+  const [lightTheme, setLightTheme] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(true);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <View style={styles.container}>
+        {showWelcome ? (
+          <Welcome
+            lightTheme={lightTheme}
+            setLightTheme={setLightTheme}
+            navigateToPortfolio={() => setShowWelcome(false)}
+          />
+        ) : (
+          <Portfolio lightTheme={lightTheme} setLightTheme={setLightTheme} />
+        )}
+      </View>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
