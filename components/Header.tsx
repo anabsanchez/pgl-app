@@ -19,23 +19,49 @@ const Header = ({ lightTheme, setLightTheme }: HeaderProps) => {
         <MaterialCommunityIcons
           name="theme-light-dark"
           size={24}
-          color="white"
+          color={lightTheme ? "white" : "#F49879"}
           onPress={() => setLightTheme(!lightTheme)}
         />
-        <Text style={[styles.headerTitle, { color: "white" }]}>
+        <Text
+          style={[
+            styles.headerTitle,
+            { color: lightTheme ? "white" : "#F49879" },
+          ]}
+        >
           My Portfolio
         </Text>
         <View style={{ width: 24 }} />
       </View>
 
-      <View style={styles.descriptionContainer}>
+      <View
+        style={[
+          styles.descriptionContainer,
+          {
+            backgroundColor: lightTheme
+              ? "rgba(245, 245, 245, 0.2)"
+              : "rgba(244, 210, 121, 0.07)",
+          },
+        ]}
+      >
         <Image
           style={styles.avatar}
           source={require("../assets/images/profile/AnaSanchez.jpeg")}
         />
         <View style={styles.descriptionBox}>
-          <Text style={styles.descriptionTitle}>Hey there, this is Ana!</Text>
-          <Text style={styles.description}>
+          <Text
+            style={[
+              styles.descriptionTitle,
+              { color: lightTheme ? "white" : "#F49879" },
+            ]}
+          >
+            Hey there, this is Ana!
+          </Text>
+          <Text
+            style={[
+              styles.description,
+              { color: lightTheme ? "white" : "#F49879" },
+            ]}
+          >
             I'm just a programming student trying to figure out my way into this
             crazy world of ones and zeros, despite my teacher's efforts to make
             it as difficult as possible.
@@ -78,7 +104,6 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     borderRadius: 10,
-    backgroundColor: "rgba(244, 210, 121, .07)",
   },
   avatar: {
     height: 100,
@@ -93,11 +118,9 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
     marginBottom: 5,
-    color: "#333",
   },
   description: {
     fontSize: 12,
-    color: "#333",
     textAlign: "justify",
   },
 });
