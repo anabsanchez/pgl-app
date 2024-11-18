@@ -1,4 +1,10 @@
-import { StyleSheet, ScrollView, Text, View } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  Text,
+  View,
+  ImageBackground,
+} from "react-native";
 import React from "react";
 import hobbiesData from "../utils/HobbiesData";
 
@@ -20,35 +26,48 @@ const Hobbies = ({ lightTheme }: HobbiesProps) => {
   const themeColors = lightTheme ? LIGHT_THEME : DARK_THEME;
 
   return (
-    <View
-      style={[
-        styles.hobbiesContainer,
-        { backgroundColor: themeColors.containerBackground },
-      ]}
+    <ImageBackground
+      source={
+        lightTheme
+          ? require("../assets/images/background/BlindingSun(perfect for light theme).jpeg")
+          : require("../assets/images/background/SolarSystem.jpg")
+      }
+      resizeMode="cover"
+      style={styles.background}
     >
-      <Text style={styles.hobbiesTitle}>
-        Now, here's some of the stuff I enjoy:
-      </Text>
-      <ScrollView style={styles.hobbiesList}>
-        {hobbiesData.map((hobby, index) => (
-          <View
-            key={index}
-            style={[
-              styles.hobbyItem,
-              { backgroundColor: themeColors.itemBackground },
-            ]}
-          >
-            <Text style={styles.hobbyText}>{hobby.text}</Text>
-          </View>
-        ))}
-      </ScrollView>
-    </View>
+      <View
+        style={[
+          styles.hobbiesContainer,
+          { backgroundColor: themeColors.containerBackground },
+        ]}
+      >
+        <Text style={styles.hobbiesTitle}>
+          Now, here's some of the stuff I enjoy:
+        </Text>
+        <ScrollView style={styles.hobbiesList}>
+          {hobbiesData.map((hobby, index) => (
+            <View
+              key={index}
+              style={[
+                styles.hobbyItem,
+                { backgroundColor: themeColors.itemBackground },
+              ]}
+            >
+              <Text style={styles.hobbyText}>{hobby.text}</Text>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+    </ImageBackground>
   );
 };
 
 export default Hobbies;
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+  },
   hobbiesContainer: {
     width: 300,
     alignSelf: "center",
@@ -56,7 +75,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   hobbiesTitle: {
-    color: "white",
+    color: "rgba(244, 152, 121, .7)",
     fontWeight: "800",
     fontSize: 14,
     textAlign: "center",
@@ -73,7 +92,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   hobbyText: {
-    color: "white",
+    color: "rgba(244, 152, 121, .8)",
     textAlign: "center",
     fontWeight: "bold",
     fontStyle: "italic",
