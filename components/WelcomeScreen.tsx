@@ -8,77 +8,77 @@ export type WelcomeProps = {
   navigateToPortfolio: () => void;
 };
 
-const WelcomeScreen = ({
+const Welcome = ({
   lightTheme,
   setLightTheme,
   navigateToPortfolio,
-}: WelcomeProps) => {
-  return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: lightTheme ? "#F49879" : "#1B110E" },
-      ]}
+}: WelcomeProps) => (
+  <View
+    style={[
+      styles.container,
+      { backgroundColor: lightTheme ? "#F49879" : "#1B110E" },
+    ]}
+  >
+    <TouchableOpacity
+      onPress={() => setLightTheme(!lightTheme)}
+      style={styles.themeIcon}
     >
-      <TouchableOpacity
-        onPress={() => setLightTheme(!lightTheme)}
-        style={styles.themeIcon}
-      >
-        <MaterialCommunityIcons
-          name="theme-light-dark"
-          size={24}
-          color={lightTheme ? "white" : "#F49879"} // ícono blanco en modo claro, #F49879 en modo oscuro
-        />
-      </TouchableOpacity>
+      <MaterialCommunityIcons
+        name="theme-light-dark"
+        size={24}
+        color={lightTheme ? "white" : "#F49879"}
+      />
+    </TouchableOpacity>
 
-      <View style={styles.content}>
-        <Image
-          source={
-            lightTheme
-              ? require("../assets/images/rocket_light.png")
-              : require("../assets/images/rocket_dark.png")
-          }
-          style={styles.image}
-        />
-        <View style={styles.titleContainer}>
-          <Text
-            style={[
-              styles.title,
-              { fontSize: 60, color: lightTheme ? "white" : "#F49879" },
-            ]}
-          >
-            Welcome
-          </Text>
-          <Text
-            style={[
-              styles.title,
-              { fontSize: 45, color: lightTheme ? "white" : "#F49879" },
-            ]}
-          >
-            aboard
-          </Text>
-        </View>
-
-        <TouchableOpacity
+    <View style={styles.content}>
+      <Image
+        source={
+          lightTheme
+            ? require("../assets/images/rocket_light.png")
+            : require("../assets/images/rocket_dark.png")
+        }
+        style={styles.image}
+      />
+      <View style={styles.titleContainer}>
+        <Text
           style={[
-            styles.button,
-            { backgroundColor: lightTheme ? "white" : "#F49879" },
+            styles.title,
+            { fontSize: 60, color: lightTheme ? "white" : "#F49879" },
           ]}
-          onPress={navigateToPortfolio}
         >
-          <Text
-            style={[
-              styles.buttonText,
-              { color: lightTheme ? "#F49879" : "#1B110E" },
-            ]}
-          >
-            let's start
-          </Text>
-        </TouchableOpacity>
+          Welcome
+        </Text>
+        <Text
+          style={[
+            styles.title,
+            { fontSize: 45, color: lightTheme ? "white" : "#F49879" },
+          ]}
+        >
+          aboard
+        </Text>
       </View>
+
+      <TouchableOpacity
+        style={[
+          styles.button,
+          { backgroundColor: lightTheme ? "white" : "#F49879" },
+        ]}
+        onPress={navigateToPortfolio}
+      >
+        <Text
+          style={[
+            styles.buttonText,
+            { color: lightTheme ? "#F49879" : "#1B110E" },
+          ]}
+        >
+          let's start
+        </Text>
+      </TouchableOpacity>
     </View>
-  );
-};
+  </View>
+);
+
+export default Welcome;
 
 const styles = StyleSheet.create({
   container: {
@@ -125,5 +125,3 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-
-export default WelcomeScreen;
