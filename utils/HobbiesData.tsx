@@ -14,9 +14,6 @@ const hobbiesData = [
     text: "Reaching a deep understanding of any math, physics or informatics's concept.",
   },
   { text: "Going hiking and being in awe of amazing landscapes." },
-  { text: "..." },
-  { text: "..." },
-  { text: "..." },
 ];
 
 export default hobbiesData;
