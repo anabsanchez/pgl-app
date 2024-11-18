@@ -11,11 +11,15 @@ import hobbiesData from "../utils/HobbiesData";
 const LIGHT_THEME = {
   containerBackground: "rgba(150, 40, 40, .3)",
   itemBackground: "rgba(255, 165, 0, 0.3)",
+  titleTextColor: "white", // Color blanco para el modo claro
+  hobbyTextColor: "white", // Color blanco para los hobbies en modo claro
 };
 
 const DARK_THEME = {
   containerBackground: "rgba(40, 40, 40, 0.4)",
   itemBackground: "rgba(255, 165, 0, 0.1)",
+  titleTextColor: "rgba(244, 152, 121, .7)", // Color actual para el título en modo oscuro
+  hobbyTextColor: "rgba(244, 152, 121, .8)", // Color actual para el texto de los hobbies en modo oscuro
 };
 
 export type HobbiesProps = {
@@ -41,7 +45,9 @@ const Hobbies = ({ lightTheme }: HobbiesProps) => {
           { backgroundColor: themeColors.containerBackground },
         ]}
       >
-        <Text style={styles.hobbiesTitle}>
+        <Text
+          style={[styles.hobbiesTitle, { color: themeColors.titleTextColor }]}
+        >
           Now, here's some of the stuff I enjoy:
         </Text>
         <ScrollView style={styles.hobbiesList}>
@@ -53,7 +59,14 @@ const Hobbies = ({ lightTheme }: HobbiesProps) => {
                 { backgroundColor: themeColors.itemBackground },
               ]}
             >
-              <Text style={styles.hobbyText}>{hobby.text}</Text>
+              <Text
+                style={[
+                  styles.hobbyText,
+                  { color: themeColors.hobbyTextColor },
+                ]}
+              >
+                {hobby.text}
+              </Text>
             </View>
           ))}
         </ScrollView>
@@ -75,7 +88,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   hobbiesTitle: {
-    color: "rgba(244, 152, 121, .7)",
     fontWeight: "800",
     fontSize: 14,
     textAlign: "center",
@@ -92,7 +104,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   hobbyText: {
-    color: "rgba(244, 152, 121, .8)",
     textAlign: "center",
     fontWeight: "bold",
     fontStyle: "italic",

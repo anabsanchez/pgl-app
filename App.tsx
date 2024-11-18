@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import WelcomeScreen from "./components/WelcomeScreen";
-import Portfolio from "./components/Portfolio";
+import Welcome from "./components/WelcomeScreen";
+import Portfolio from "./components/PortfolioScreen";
 
 export default function App() {
   const [lightTheme, setLightTheme] = useState(true);
@@ -12,7 +12,7 @@ export default function App() {
     <NavigationContainer>
       <View style={styles.container}>
         {showWelcome ? (
-          <WelcomeScreen
+          <Welcome
             lightTheme={lightTheme}
             setLightTheme={setLightTheme}
             navigateToPortfolio={() => setShowWelcome(false)}
