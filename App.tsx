@@ -1,45 +1,32 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import Header from "./components/Header";
-import InfoTab from "./components/InfoTab";
-import Repo from "./components/RepoTab";
+import { NavigationContainer } from "@react-navigation/native";
+import WelcomeScreen from "./components/WelcomeScreen";
+import Portfolio from "./components/Portfolio";
 
 export default function App() {
-  const [displayQR, setDisplayQR] = useState(true);
   const [lightTheme, setLightTheme] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(true);
 
   return (
-    <View style={styles.container}>
-      <Header
-        displayQR={displayQR}
-        setDisplayQR={setDisplayQR}
-        lightTheme={lightTheme}
-        setLightTheme={setLightTheme}
-      />
-
-      <View style={styles.body}>
-        {displayQR ? (
-          <InfoTab lightTheme={lightTheme} />
+    <NavigationContainer>
+      <View style={styles.container}>
+        {showWelcome ? (
+          <WelcomeScreen
+            lightTheme={lightTheme}
+            setLightTheme={setLightTheme}
+            navigateToPortfolio={() => setShowWelcome(false)}
+          />
         ) : (
-          <Repo lightTheme={lightTheme} />
+          <Portfolio lightTheme={lightTheme} setLightTheme={setLightTheme} />
         )}
       </View>
-    </View>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  body: {
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "space-between",
-    height: "85%",
-    marginTop: 10,
   },
 });
