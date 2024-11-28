@@ -1,10 +1,8 @@
-import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import React from "react";
+import { Text, StyleSheet, View, Image } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useRouter } from "expo-router";
 import { LIGHT_THEME, DARK_THEME } from "../utils/ThemeColors";
-import { useNavigation } from "@react-navigation/native";
 
 export type HeaderProps = {
   lightTheme: boolean;
@@ -13,8 +11,6 @@ export type HeaderProps = {
 
 const Header = ({ lightTheme, setLightTheme }: HeaderProps) => {
   const themeColors = lightTheme ? LIGHT_THEME : DARK_THEME;
-  const router = useRouter();
-  const navigation = useNavigation();
 
   return (
     <View
@@ -24,44 +20,36 @@ const Header = ({ lightTheme, setLightTheme }: HeaderProps) => {
         <MaterialCommunityIcons
           name="theme-light-dark"
           size={24}
-          color={lightTheme ? "white" : "#F49879"}
+          color={themeColors.themeIconColor}
           onPress={() => setLightTheme(!lightTheme)}
         />
         <Text
-          style={[
-            styles.headerTitle,
-            { color: lightTheme ? "white" : "#F49879" },
-          ]}
+          style={[styles.headerTitle, { color: themeColors.titleTextColor }]}
         >
           My Portfolio
         </Text>
-
         <MaterialIcons
           name="rocket-launch"
           size={24}
-          color={lightTheme ? "white" : "#F49879"}
+          color={themeColors.themeIconColor}
         />
       </View>
 
       <View
         style={[
           styles.descriptionContainer,
-          {
-            backgroundColor: lightTheme
-              ? "rgba(245, 245, 245, 0.2)"
-              : "rgba(244, 210, 121, 0.07)",
-          },
+          { backgroundColor: themeColors.descriptionBoxBackground },
         ]}
       >
         <Image
           style={styles.avatar}
-          source={require("../assets/images/profile/AnaSanchez.jpeg")}
+          source={require("../assets/images/portfolio/profile/AnaSanchez.jpeg")}
         />
         <View style={styles.descriptionBox}>
           <Text
             style={[
               styles.descriptionTitle,
-              { color: lightTheme ? "white" : "#F49879" },
+              { color: themeColors.descriptionTextColor },
             ]}
           >
             Hey there, this is Ana!
@@ -69,7 +57,7 @@ const Header = ({ lightTheme, setLightTheme }: HeaderProps) => {
           <Text
             style={[
               styles.description,
-              { color: lightTheme ? "white" : "#F49879" },
+              { color: themeColors.descriptionTextColor },
             ]}
           >
             I'm just a programming student trying to figure out my way into this

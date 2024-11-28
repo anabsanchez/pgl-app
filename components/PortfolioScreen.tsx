@@ -3,6 +3,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import Hobbies from "./HobbiesTab";
 import Repo from "./RepoTab";
 import Header from "./Header";
+import { LIGHT_THEME, DARK_THEME } from "../utils/ThemeColors";
 
 export type PortfolioProps = {
   lightTheme: boolean;
@@ -11,34 +12,35 @@ export type PortfolioProps = {
 
 const Tab = createMaterialTopTabNavigator();
 
-const Portfolio = ({ lightTheme, setLightTheme }: PortfolioProps) => (
-  <>
-    <Header lightTheme={lightTheme} setLightTheme={setLightTheme} />
+const Portfolio = ({ lightTheme, setLightTheme }: PortfolioProps) => {
+  const themeColors = lightTheme ? LIGHT_THEME : DARK_THEME;
 
-    <Tab.Navigator
-      screenOptions={{
-        tabBarStyle: {
-          backgroundColor: lightTheme ? "#F49879" : "#1B110E",
-        },
-        tabBarIndicatorStyle: {
-          backgroundColor: lightTheme ? "#F5F5F5" : "#F49879",
-        },
-        tabBarActiveTintColor: lightTheme ? "#F5F5F5" : "#F49879",
-        tabBarInactiveTintColor: lightTheme
-          ? "rgba(245, 245, 245, .5)"
-          : "rgba(244, 152, 121, .5)",
-      }}
-    >
-      <Tab.Screen
-        name="Hobbies"
-        children={() => <Hobbies lightTheme={lightTheme} />}
-      />
-      <Tab.Screen
-        name="QR Repo"
-        children={() => <Repo lightTheme={lightTheme} />}
-      />
-    </Tab.Navigator>
-  </>
-);
+  return (
+    <>
+      <Header lightTheme={lightTheme} setLightTheme={setLightTheme} />
+      <Tab.Navigator
+        screenOptions={{
+          tabBarStyle: {
+            backgroundColor: themeColors.tabBarBackground,
+          },
+          tabBarIndicatorStyle: {
+            backgroundColor: themeColors.tabBarIndicator,
+          },
+          tabBarActiveTintColor: themeColors.tabBarActiveTint,
+          tabBarInactiveTintColor: themeColors.tabBarInactiveTint,
+        }}
+      >
+        <Tab.Screen
+          name="Hobbies"
+          children={() => <Hobbies lightTheme={lightTheme} />}
+        />
+        <Tab.Screen
+          name="QR Repo"
+          children={() => <Repo lightTheme={lightTheme} />}
+        />
+      </Tab.Navigator>
+    </>
+  );
+};
 
 export default Portfolio;

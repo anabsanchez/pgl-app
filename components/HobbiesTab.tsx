@@ -1,3 +1,4 @@
+import React from "react";
 import {
   StyleSheet,
   ScrollView,
@@ -5,22 +6,8 @@ import {
   View,
   ImageBackground,
 } from "react-native";
-import React from "react";
 import hobbiesData from "../utils/HobbiesData";
-
-const LIGHT_THEME = {
-  containerBackground: "rgba(150, 40, 40, .3)",
-  itemBackground: "rgba(255, 165, 0, 0.3)",
-  titleTextColor: "white", // Color blanco para el modo claro
-  hobbyTextColor: "white", // Color blanco para los hobbies en modo claro
-};
-
-const DARK_THEME = {
-  containerBackground: "rgba(40, 40, 40, 0.4)",
-  itemBackground: "rgba(255, 165, 0, 0.1)",
-  titleTextColor: "rgba(244, 152, 121, .7)", // Color actual para el título en modo oscuro
-  hobbyTextColor: "rgba(244, 152, 121, .8)", // Color actual para el texto de los hobbies en modo oscuro
-};
+import { LIGHT_THEME, DARK_THEME } from "../utils/ThemeColors";
 
 export type HobbiesProps = {
   lightTheme: boolean;
