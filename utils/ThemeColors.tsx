@@ -16,6 +16,7 @@ export const LIGHT_THEME = {
   welcomeButtonTextColor: "#F49879",
   descriptionBoxBackground: "rgba(245, 245, 245, 0.2)",
   descriptionTextColor: "white",
+  textColor: "white",
 };
 
 export const DARK_THEME = {
@@ -34,4 +35,5 @@ export const DARK_THEME = {
   welcomeButtonTextColor: "#1B110E",
   descriptionBoxBackground: "rgba(244, 210, 121, 0.07)",
   descriptionTextColor: "#F49879",
+  textColor: "#F49879",
 };
