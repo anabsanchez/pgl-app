@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { LIGHT_THEME, DARK_THEME } from "../utils/ThemeColors";
 
 export type WelcomeProps = {
   lightTheme: boolean;
@@ -12,71 +13,75 @@ const Welcome = ({
   lightTheme,
   setLightTheme,
   navigateToPortfolio,
-}: WelcomeProps) => (
-  <View
-    style={[
-      styles.container,
-      { backgroundColor: lightTheme ? "#F49879" : "#1B110E" },
-    ]}
-  >
-    <TouchableOpacity
-      onPress={() => setLightTheme(!lightTheme)}
-      style={styles.themeIcon}
+}: WelcomeProps) => {
+  const themeColors = lightTheme ? LIGHT_THEME : DARK_THEME;
+
+  return (
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: themeColors.welcomeBackground },
+      ]}
     >
-      <MaterialCommunityIcons
-        name="theme-light-dark"
-        size={24}
-        color={lightTheme ? "white" : "#F49879"}
-      />
-    </TouchableOpacity>
-
-    <View style={styles.content}>
-      <Image
-        source={
-          lightTheme
-            ? require("../assets/images/rocket_light.png")
-            : require("../assets/images/rocket_dark.png")
-        }
-        style={styles.image}
-      />
-      <View style={styles.titleContainer}>
-        <Text
-          style={[
-            styles.title,
-            { fontSize: 60, color: lightTheme ? "white" : "#F49879" },
-          ]}
-        >
-          Welcome
-        </Text>
-        <Text
-          style={[
-            styles.title,
-            { fontSize: 45, color: lightTheme ? "white" : "#F49879" },
-          ]}
-        >
-          aboard
-        </Text>
-      </View>
-
       <TouchableOpacity
-        style={[
-          styles.button,
-          { backgroundColor: lightTheme ? "white" : "#F49879" },
-        ]}
-        onPress={navigateToPortfolio}
+        onPress={() => setLightTheme(!lightTheme)}
+        style={styles.themeIcon}
       >
-        <Text
-          style={[
-            styles.buttonText,
-            { color: lightTheme ? "#F49879" : "#1B110E" },
-          ]}
-        >
-          let's start
-        </Text>
+        <MaterialCommunityIcons
+          name="theme-light-dark"
+          size={24}
+          color={themeColors.themeIconColor}
+        />
       </TouchableOpacity>
+
+      <View style={styles.content}>
+        <Image
+          source={
+            lightTheme
+              ? require("../assets/images/welcome/rocket_light.png")
+              : require("../assets/images/welcome/rocket_dark.png")
+          }
+          style={styles.image}
+        />
+        <View style={styles.titleContainer}>
+          <Text
+            style={[
+              styles.title,
+              { fontSize: 60, color: themeColors.titleTextColor },
+            ]}
+          >
+            Welcome
+          </Text>
+          <Text
+            style={[
+              styles.title,
+              { fontSize: 45, color: themeColors.titleTextColor },
+            ]}
+          >
+            aboard
+          </Text>
+        </View>
+
+        <TouchableOpacity
+          style={[
+            styles.button,
+            { backgroundColor: themeColors.welcomeButtonBackground },
+          ]}
+          onPress={navigateToPortfolio}
+        >
+          <Text
+            style={[
+              styles.buttonText,
+              { color: themeColors.welcomeButtonTextColor },
+            ]}
+          >
+            let's start
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 export default Welcome;
 

@@ -1,30 +1,35 @@
-import { ImageBackground, StyleSheet, View } from "react-native";
 import React from "react";
+import { ImageBackground, StyleSheet, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
+import { LIGHT_THEME, DARK_THEME } from "../utils/ThemeColors";
 
 export type RepoProps = {
   lightTheme: boolean;
 };
 
-const Repo = ({ lightTheme }: RepoProps) => (
-  <ImageBackground
-    source={
-      lightTheme
-        ? require("../assets/images/background/BlindingSun(perfect for light theme).jpeg")
-        : require("../assets/images/background/SolarSystem.jpg")
-    }
-    resizeMode="cover"
-    style={styles.background}
-  >
-    <View style={styles.repoTab}>
-      <View style={styles.qrContainer}>
-        <View style={styles.qrWrapper}>
-          <QRCode value="https://github.com/anabsanchez" size={100} />
+const Repo = ({ lightTheme }: RepoProps) => {
+  const themeColors = lightTheme ? LIGHT_THEME : DARK_THEME;
+
+  return (
+    <ImageBackground
+      source={
+        lightTheme
+          ? require("../assets/images/portfolio/background/BlindingSun(perfect for light theme).jpeg")
+          : require("../assets/images/portfolio/background/SolarSystem.jpg")
+      }
+      resizeMode="cover"
+      style={styles.background}
+    >
+      <View style={styles.repoTab}>
+        <View style={styles.qrContainer}>
+          <View style={styles.qrWrapper}>
+            <QRCode value="https://github.com/anabsanchez" size={100} />
+          </View>
         </View>
       </View>
-    </View>
-  </ImageBackground>
-);
+    </ImageBackground>
+  );
+};
 
 export default Repo;
 
