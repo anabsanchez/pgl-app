@@ -17,6 +17,7 @@ const uncheckedIcon = require("../assets/images/shopping-list/icons/unchecked.pn
 const checkedIcon = require("../assets/images/shopping-list/icons/checked.png");
 const addIcon = require("../assets/images/shopping-list/icons/add.png");
 const deleteIcon = require("../assets/images/shopping-list/icons/delete.png");
+const editIcon = require("../assets/images/shopping-list/icons/edit.png"); // Icono de edición
 
 type Product = {
   id: string;
@@ -55,6 +56,7 @@ const ShoppingList = () => {
     quantity: "",
     unitPrice: "",
   });
+  const [editingProductId, setEditingProductId] = useState<string | null>(null);
 
   const calculateTotalPrice = () => {
     const total = products
@@ -82,7 +84,7 @@ const ShoppingList = () => {
     calculateTotalPrice();
   };
 
-  const handleAddProduct = () => {
+  const handleAddOrEditProduct = () => {
     const { name, category, quantity, unitPrice } = newProduct;
 
     if (!name || !category || !quantity || !unitPrice) {
@@ -103,8 +105,8 @@ const ShoppingList = () => {
       return;
     }
 
-    const newProductObj = {
-      id: uuid.v4(),
+    const updatedProductObj = {
+      id: editingProductId || uuid.v4(),
       name,
       category,
       quantity: Number(quantity),
@@ -112,7 +114,16 @@ const ShoppingList = () => {
       obtained: false,
     };
 
-    setProducts((prevProducts) => [...prevProducts, newProductObj]);
+    if (editingProductId) {
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product.id === editingProductId ? updatedProductObj : product
+        )
+      );
+    } else {
+      setProducts((prevProducts) => [...prevProducts, updatedProductObj]);
+    }
+
     setModalVisible(false);
     setNewProduct({
       name: "",
@@ -120,7 +131,19 @@ const ShoppingList = () => {
       quantity: "",
       unitPrice: "",
     });
+    setEditingProductId(null);
     calculateTotalPrice();
+  };
+
+  const startEditingProduct = (product: Product) => {
+    setNewProduct({
+      name: product.name,
+      category: product.category,
+      quantity: String(product.quantity),
+      unitPrice: String(product.unitPrice),
+    });
+    setEditingProductId(product.id);
+    setModalVisible(true);
   };
 
   const renderFooter = () => (
@@ -176,6 +199,12 @@ const ShoppingList = () => {
                 {item.quantity} x €{item.unitPrice.toFixed(2)}
               </Text>
               <TouchableOpacity
+                onPress={() => startEditingProduct(item)}
+                style={styles.editButton}
+              >
+                <Image source={editIcon} style={styles.editButtonImage} />
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={() => deleteProduct(item.id)}
                 style={styles.deleteButton}
               >
@@ -187,6 +216,7 @@ const ShoppingList = () => {
         />
       )}
 
+      {/* Modal para agregar o editar producto */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -195,7 +225,9 @@ const ShoppingList = () => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Add New Product</Text>
+            <Text style={styles.modalTitle}>
+              {editingProductId ? "Edit Product" : "Add New Product"}
+            </Text>
             <TextInput
               style={styles.input}
               placeholder="Product Name"
@@ -230,11 +262,17 @@ const ShoppingList = () => {
                 setNewProduct({ ...newProduct, unitPrice: text })
               }
             />
-            <Button title="Add Product" onPress={handleAddProduct} />
+            <Button
+              title={editingProductId ? "Save Changes" : "Add Product"}
+              onPress={handleAddOrEditProduct}
+            />
             <Button
               title="Cancel"
               color="red"
-              onPress={() => setModalVisible(false)}
+              onPress={() => {
+                setModalVisible(false);
+                setEditingProductId(null);
+              }}
             />
           </View>
         </View>
@@ -328,6 +366,13 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   deleteButtonImage: {
+    width: 20,
+    height: 20,
+  },
+  editButton: {
+    marginLeft: 10,
+  },
+  editButtonImage: {
     width: 20,
     height: 20,
   },
