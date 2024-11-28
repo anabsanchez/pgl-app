@@ -12,6 +12,7 @@ import uuid from "react-native-uuid";
 const uncheckedIcon = require("../assets/images/shopping-list/icons/unchecked.png");
 const checkedIcon = require("../assets/images/shopping-list/icons/checked.png");
 const addIcon = require("../assets/images/shopping-list/icons/add.png");
+const deleteIcon = require("../assets/images/shopping-list/icons/delete.png");
 
 type Product = {
   id: string;
@@ -44,7 +45,12 @@ const ShoppingList = () => {
 
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const calculateTotalPrice = () => {};
+  const calculateTotalPrice = () => {
+    const total = products
+      .filter((product) => product.obtained)
+      .reduce((sum, product) => sum + product.quantity * product.unitPrice, 0);
+    setTotalPrice(total);
+  };
 
   const toggleObtained = (id: string) => {
     setProducts((prevProducts) => {
@@ -56,6 +62,13 @@ const ShoppingList = () => {
       calculateTotalPrice();
       return updatedProducts;
     });
+  };
+
+  const deleteProduct = (id: string) => {
+    setProducts((prevProducts) =>
+      prevProducts.filter((product) => product.id !== id)
+    );
+    calculateTotalPrice();
   };
 
   const renderFooter = () => (
@@ -107,6 +120,12 @@ const ShoppingList = () => {
               <Text style={styles.productDetails}>
                 {item.quantity} x €{item.unitPrice.toFixed(2)}
               </Text>
+              <TouchableOpacity
+                onPress={() => deleteProduct(item.id)}
+                style={styles.deleteButton}
+              >
+                <Image source={deleteIcon} style={styles.deleteButtonImage} />
+              </TouchableOpacity>
             </View>
           )}
           ListFooterComponent={renderFooter}
@@ -154,6 +173,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     marginTop: 20,
+    marginBottom: 20,
     color: "#FFFFFF",
   },
   productItem: {
@@ -194,6 +214,13 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   addButtonImage: {
+    width: 20,
+    height: 20,
+  },
+  deleteButton: {
+    marginLeft: 10,
+  },
+  deleteButtonImage: {
     width: 20,
     height: 20,
   },
