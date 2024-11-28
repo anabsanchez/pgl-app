@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import Welcome from "./components/WelcomeScreen";
 import Portfolio from "./components/PortfolioScreen";
+import ShoppingList from "./components/ShoppingList";
 
 export default function App() {
   const [lightTheme, setLightTheme] = useState(true);
@@ -11,7 +12,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <View style={styles.container}>
-        {showWelcome ? (
+        <ShoppingList />
+        {/* {showWelcome ? (
           <Welcome
             lightTheme={lightTheme}
             setLightTheme={setLightTheme}
@@ -19,7 +21,7 @@ export default function App() {
           />
         ) : (
           <Portfolio lightTheme={lightTheme} setLightTheme={setLightTheme} />
-        )}
+        )} */}
       </View>
     </NavigationContainer>
   );

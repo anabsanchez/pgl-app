@@ -20,8 +20,8 @@ const Hobbies = ({ lightTheme }: HobbiesProps) => {
     <ImageBackground
       source={
         lightTheme
-          ? require("../assets/images/background/BlindingSun(perfect for light theme).jpeg")
-          : require("../assets/images/background/SolarSystem.jpg")
+          ? require("../assets/images/portfolio/background/BlindingSun(perfect for light theme).jpeg")
+          : require("../assets/images/portfolio/background/SolarSystem.jpg")
       }
       resizeMode="cover"
       style={styles.background}
