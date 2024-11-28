@@ -6,6 +6,10 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
+  Modal,
+  TextInput,
+  Button,
+  Alert,
 } from "react-native";
 import uuid from "react-native-uuid";
 
@@ -44,6 +48,13 @@ const ShoppingList = () => {
   ]);
 
   const [totalPrice, setTotalPrice] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [newProduct, setNewProduct] = useState({
+    name: "",
+    category: "",
+    quantity: "",
+    unitPrice: "",
+  });
 
   const calculateTotalPrice = () => {
     const total = products
@@ -71,8 +82,52 @@ const ShoppingList = () => {
     calculateTotalPrice();
   };
 
+  const handleAddProduct = () => {
+    const { name, category, quantity, unitPrice } = newProduct;
+
+    if (!name || !category || !quantity || !unitPrice) {
+      Alert.alert("Error", "Todos los campos son obligatorios.");
+      return;
+    }
+
+    if (isNaN(Number(quantity)) || Number(quantity) <= 0) {
+      Alert.alert(
+        "Error",
+        "La cantidad debe ser un número válido mayor que 0."
+      );
+      return;
+    }
+
+    if (isNaN(Number(unitPrice)) || Number(unitPrice) <= 0) {
+      Alert.alert("Error", "El precio debe ser un número válido mayor que 0.");
+      return;
+    }
+
+    const newProductObj = {
+      id: uuid.v4(),
+      name,
+      category,
+      quantity: Number(quantity),
+      unitPrice: Number(unitPrice),
+      obtained: false,
+    };
+
+    setProducts((prevProducts) => [...prevProducts, newProductObj]);
+    setModalVisible(false);
+    setNewProduct({
+      name: "",
+      category: "",
+      quantity: "",
+      unitPrice: "",
+    });
+    calculateTotalPrice();
+  };
+
   const renderFooter = () => (
-    <TouchableOpacity style={styles.addButton} onPress={() => alert("WIP")}>
+    <TouchableOpacity
+      style={styles.addButton}
+      onPress={() => setModalVisible(true)}
+    >
       <Image source={addIcon} style={styles.addButtonImage} />
     </TouchableOpacity>
   );
@@ -131,6 +186,59 @@ const ShoppingList = () => {
           ListFooterComponent={renderFooter}
         />
       )}
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Add New Product</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Product Name"
+              value={newProduct.name}
+              onChangeText={(text) =>
+                setNewProduct({ ...newProduct, name: text })
+              }
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Category"
+              value={newProduct.category}
+              onChangeText={(text) =>
+                setNewProduct({ ...newProduct, category: text })
+              }
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Quantity"
+              keyboardType="numeric"
+              value={newProduct.quantity}
+              onChangeText={(text) =>
+                setNewProduct({ ...newProduct, quantity: text })
+              }
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Unit Price (€)"
+              keyboardType="numeric"
+              value={newProduct.unitPrice}
+              onChangeText={(text) =>
+                setNewProduct({ ...newProduct, unitPrice: text })
+              }
+            />
+            <Button title="Add Product" onPress={handleAddProduct} />
+            <Button
+              title="Cancel"
+              color="red"
+              onPress={() => setModalVisible(false)}
+            />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -173,7 +281,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     marginTop: 20,
-    marginBottom: 20,
     color: "#FFFFFF",
   },
   productItem: {
@@ -223,6 +330,30 @@ const styles = StyleSheet.create({
   deleteButtonImage: {
     width: 20,
     height: 20,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    marginBottom: 10,
+    padding: 10,
+    borderRadius: 5,
   },
 });
 
