@@ -216,7 +216,6 @@ const ShoppingList = () => {
         />
       )}
 
-      {/* Modal para agregar o editar producto */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -262,18 +261,25 @@ const ShoppingList = () => {
                 setNewProduct({ ...newProduct, unitPrice: text })
               }
             />
-            <Button
-              title={editingProductId ? "Save Changes" : "Add Product"}
-              onPress={handleAddOrEditProduct}
-            />
-            <Button
-              title="Cancel"
-              color="red"
-              onPress={() => {
-                setModalVisible(false);
-                setEditingProductId(null);
-              }}
-            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={handleAddOrEditProduct}
+              >
+                <Text style={styles.modalButtonText}>
+                  {editingProductId ? "Save Changes" : "Add Product"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => {
+                  setModalVisible(false);
+                  setEditingProductId(null);
+                }}
+              >
+                <Text style={styles.modalButtonText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -399,6 +405,25 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 10,
     borderRadius: 5,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  modalButton: {
+    flex: 1,
+    padding: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    backgroundColor: "#F49879", // Color unificado
+    alignItems: "center",
+  },
+  cancelButton: {
+    opacity: 0.8, // Ligera diferencia para distinguir el botón Cancelar
+  },
+  modalButtonText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });
 
