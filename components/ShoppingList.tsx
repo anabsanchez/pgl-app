@@ -1,3 +1,4 @@
+import { Picker } from "@react-native-picker/picker";
 import React, { useState } from "react";
 import {
   StyleSheet,
@@ -17,7 +18,25 @@ const uncheckedIcon = require("../assets/images/shopping-list/icons/unchecked.pn
 const checkedIcon = require("../assets/images/shopping-list/icons/checked.png");
 const addIcon = require("../assets/images/shopping-list/icons/add.png");
 const deleteIcon = require("../assets/images/shopping-list/icons/delete.png");
-const editIcon = require("../assets/images/shopping-list/icons/edit.png"); // Icono de edición
+const editIcon = require("../assets/images/shopping-list/icons/edit.png");
+
+const bakeryImage = require("../assets/images/shopping-list/products/bakery.png");
+const cannedImage = require("../assets/images/shopping-list/products/canned.png");
+const drinksImage = require("../assets/images/shopping-list/products/drinks.png");
+const fishImage = require("../assets/images/shopping-list/products/fish.png");
+const meatImage = require("../assets/images/shopping-list/products/meat.png");
+const otherImage = require("../assets/images/shopping-list/products/other.png");
+const produceImage = require("../assets/images/shopping-list/products/produce.png");
+
+const categoryImages: { [key: string]: any } = {
+  bakery: bakeryImage,
+  canned: cannedImage,
+  drinks: drinksImage,
+  fish: fishImage,
+  meat: meatImage,
+  other: otherImage,
+  produce: produceImage,
+};
 
 type Product = {
   id: string;
@@ -50,16 +69,17 @@ const ShoppingList = () => {
 
   const [totalPrice, setTotalPrice] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
-  const [newProduct, setNewProduct] = useState({
-    name: "",
-    category: "",
-    quantity: "",
-    unitPrice: "",
-  });
+
+  const [newProductName, setNewProductName] = useState("");
+  const [newProductCategory, setNewProductCategory] = useState("category");
+  const [newProductQuantity, setNewProductQuantity] = useState("1");
+  const [newProductUnitPrice, setNewProductUnitPrice] = useState("0");
+
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
 
-  const calculateTotalPrice = () => {
-    const total = products
+  const calculateTotalPrice = (productsToCalculate?: Product[]) => {
+    const productsToUse = productsToCalculate || products;
+    const total = productsToUse
       .filter((product) => product.obtained)
       .reduce((sum, product) => sum + product.quantity * product.unitPrice, 0);
     setTotalPrice(total);
@@ -72,76 +92,67 @@ const ShoppingList = () => {
           ? { ...product, obtained: !product.obtained }
           : product
       );
-      calculateTotalPrice();
+
+      calculateTotalPrice(updatedProducts);
       return updatedProducts;
     });
   };
 
   const deleteProduct = (id: string) => {
-    setProducts((prevProducts) =>
-      prevProducts.filter((product) => product.id !== id)
-    );
-    calculateTotalPrice();
+    setProducts((prevProducts) => {
+      const updatedProducts = prevProducts.filter(
+        (product) => product.id !== id
+      );
+
+      calculateTotalPrice(updatedProducts);
+      return updatedProducts;
+    });
   };
 
   const handleAddOrEditProduct = () => {
-    const { name, category, quantity, unitPrice } = newProduct;
-
-    if (!name || !category || !quantity || !unitPrice) {
-      Alert.alert("Error", "Todos los campos son obligatorios.");
+    if (
+      !newProductName.trim() ||
+      !newProductQuantity ||
+      !newProductUnitPrice ||
+      newProductCategory === "category"
+    ) {
+      Alert.alert("Error", "Please fill out all fields, including a category.");
       return;
     }
 
-    if (isNaN(Number(quantity)) || Number(quantity) <= 0) {
-      Alert.alert(
-        "Error",
-        "La cantidad debe ser un número válido mayor que 0."
-      );
-      return;
-    }
-
-    if (isNaN(Number(unitPrice)) || Number(unitPrice) <= 0) {
-      Alert.alert("Error", "El precio debe ser un número válido mayor que 0.");
-      return;
-    }
-
-    const updatedProductObj = {
-      id: editingProductId || uuid.v4(),
-      name,
-      category,
-      quantity: Number(quantity),
-      unitPrice: Number(unitPrice),
+    const newProduct = {
+      id: editingProductId ?? uuid.v4(),
+      name: newProductName,
+      category: newProductCategory,
+      quantity: parseInt(newProductQuantity, 10),
+      unitPrice: parseFloat(newProductUnitPrice),
       obtained: false,
     };
 
     if (editingProductId) {
-      setProducts((prevProducts) =>
-        prevProducts.map((product) =>
-          product.id === editingProductId ? updatedProductObj : product
+      setProducts((prev) =>
+        prev.map((product) =>
+          product.id === editingProductId ? newProduct : product
         )
       );
     } else {
-      setProducts((prevProducts) => [...prevProducts, updatedProductObj]);
+      setProducts((prev) => [...prev, newProduct]);
     }
 
     setModalVisible(false);
-    setNewProduct({
-      name: "",
-      category: "",
-      quantity: "",
-      unitPrice: "",
-    });
+    setNewProductName("");
+    setNewProductCategory("category");
+    setNewProductQuantity("1");
+    setNewProductUnitPrice("0");
     setEditingProductId(null);
     calculateTotalPrice();
   };
 
   const startEditingProduct = (product: Product) => {
-    setNewProduct({
-      name: product.name,
-      category: product.category,
-      quantity: String(product.quantity),
-      unitPrice: String(product.unitPrice),
-    });
+    setNewProductName(product.name);
+    setNewProductCategory(product.category);
+    setNewProductQuantity(String(product.quantity));
+    setNewProductUnitPrice(String(product.unitPrice));
     setEditingProductId(product.id);
     setModalVisible(true);
   };
@@ -187,6 +198,7 @@ const ShoppingList = () => {
                   style={styles.checkboxImage}
                 />
               </TouchableOpacity>
+
               <Text
                 style={[
                   styles.productName,
@@ -195,9 +207,16 @@ const ShoppingList = () => {
               >
                 {item.name}
               </Text>
+
+              <Image
+                source={categoryImages[item.category]}
+                style={styles.categoryImage}
+              />
+
               <Text style={styles.productDetails}>
                 {item.quantity} x €{item.unitPrice.toFixed(2)}
               </Text>
+
               <TouchableOpacity
                 onPress={() => startEditingProduct(item)}
                 style={styles.editButton}
@@ -216,9 +235,8 @@ const ShoppingList = () => {
         />
       )}
 
-      {/* Modal para agregar o editar producto */}
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
@@ -231,49 +249,56 @@ const ShoppingList = () => {
             <TextInput
               style={styles.input}
               placeholder="Product Name"
-              value={newProduct.name}
-              onChangeText={(text) =>
-                setNewProduct({ ...newProduct, name: text })
-              }
+              value={newProductName}
+              onChangeText={setNewProductName}
             />
-            <TextInput
-              style={styles.input}
-              placeholder="Category"
-              value={newProduct.category}
-              onChangeText={(text) =>
-                setNewProduct({ ...newProduct, category: text })
-              }
-            />
+            <Picker
+              selectedValue={newProductCategory}
+              style={styles.pickerInput}
+              onValueChange={setNewProductCategory}
+            >
+              <Picker.Item label="Category" value="category" enabled={false} />
+              <Picker.Item label="Bakery" value="bakery" />
+              <Picker.Item label="Canned" value="canned" />
+              <Picker.Item label="Drinks" value="drinks" />
+              <Picker.Item label="Fish" value="fish" />
+              <Picker.Item label="Meat" value="meat" />
+              <Picker.Item label="Produce" value="produce" />
+              <Picker.Item label="Other" value="other" />
+            </Picker>
             <TextInput
               style={styles.input}
               placeholder="Quantity"
               keyboardType="numeric"
-              value={newProduct.quantity}
-              onChangeText={(text) =>
-                setNewProduct({ ...newProduct, quantity: text })
-              }
+              value={newProductQuantity}
+              onChangeText={setNewProductQuantity}
             />
             <TextInput
               style={styles.input}
               placeholder="Unit Price (€)"
               keyboardType="numeric"
-              value={newProduct.unitPrice}
-              onChangeText={(text) =>
-                setNewProduct({ ...newProduct, unitPrice: text })
-              }
+              value={newProductUnitPrice}
+              onChangeText={setNewProductUnitPrice}
             />
-            <Button
-              title={editingProductId ? "Save Changes" : "Add Product"}
-              onPress={handleAddOrEditProduct}
-            />
-            <Button
-              title="Cancel"
-              color="red"
-              onPress={() => {
-                setModalVisible(false);
-                setEditingProductId(null);
-              }}
-            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={handleAddOrEditProduct}
+              >
+                <Text style={styles.modalButtonText}>
+                  {editingProductId ? "Save Changes" : "Add"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => {
+                  setModalVisible(false);
+                  setEditingProductId(null);
+                }}
+              >
+                <Text style={styles.modalButtonText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -399,6 +424,42 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 10,
     borderRadius: 5,
+  },
+  pickerInput: {
+    height: 55,
+    backgroundColor: "#ffffff",
+    paddingHorizontal: 10,
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    marginBottom: 10,
+    padding: 10,
+    borderRadius: 5,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  modalButton: {
+    flex: 1,
+    padding: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    backgroundColor: "#F49879",
+    alignItems: "center",
+  },
+  cancelButton: {
+    opacity: 0.8,
+  },
+  modalButtonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  categoryImage: {
+    width: 20,
+    height: 20,
+    marginLeft: 10,
+    alignSelf: "center",
   },
 });
 
